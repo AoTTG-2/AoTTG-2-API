@@ -69,6 +69,8 @@ namespace AoTTG2.IDS
                     options.ClientId = "1017519256024-rlhr9vjeuhd8ovv2fe0hbb078og12uqq.apps.googleusercontent.com";
                     options.ClientSecret = "od50cBDPCiAAZVk_u3yw_SNM";
                 });
+
+            services.AddHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -101,6 +103,7 @@ namespace AoTTG2.IDS
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapHealthChecks("/health");
             });
             app.UseHttpsRedirection();
 
