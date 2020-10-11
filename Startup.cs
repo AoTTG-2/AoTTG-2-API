@@ -77,7 +77,12 @@ namespace AoTTG2.IDS
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseIdentityServer();
@@ -86,8 +91,6 @@ namespace AoTTG2.IDS
             {
                 endpoints.MapDefaultControllerRoute();
             });
-            app.UseHsts();
-            app.UseHttpsRedirection();
         }
     }
 }

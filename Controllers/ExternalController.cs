@@ -64,7 +64,7 @@ namespace AoTTG2.IDS.Controllers
             // start challenge and roundtrip the return URL and scheme 
             var props = new AuthenticationProperties
             {
-                RedirectUri = Url.Action(nameof(Callback)), 
+                RedirectUri = Url.Action(nameof(Callback), "External", null, protocol: "https"), 
                 Items =
                 {
                     { "returnUrl", returnUrl }, 
