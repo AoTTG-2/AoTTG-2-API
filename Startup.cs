@@ -52,6 +52,11 @@ namespace AoTTG2.IDS
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
+            services.AddHttpsRedirection(options =>
+            {
+                options.HttpsPort = 443;
+            });
+
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
@@ -74,6 +79,7 @@ namespace AoTTG2.IDS
             }
 
             app.UseStaticFiles();
+            app.UseMvcWithDefaultRoute();
 
             app.UseRouting();
             app.UseIdentityServer();

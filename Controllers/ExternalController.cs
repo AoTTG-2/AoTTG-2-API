@@ -53,7 +53,6 @@ namespace AoTTG2.IDS.Controllers
         public IActionResult Challenge(string scheme, string returnUrl)
         {
             if (string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";
-            returnUrl = returnUrl.Replace("http", "https");
 
             // validate returnUrl - either it is a valid OIDC URL or back to a local page
             if (Url.IsLocalUrl(returnUrl) == false && _interaction.IsValidReturnUrl(returnUrl) == false)
