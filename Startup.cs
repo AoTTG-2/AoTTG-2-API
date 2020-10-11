@@ -82,6 +82,8 @@ namespace AoTTG2.IDS
             {
                 endpoints.MapDefaultControllerRoute();
             });
+            app.UseHsts();
+            app.UseHttpsRedirection();
         }
     }
 }
