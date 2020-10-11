@@ -4,6 +4,7 @@ using IdentityServer4;
 using AoTTG2_IDS.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -80,6 +81,17 @@ namespace AoTTG2.IDS
             else
             {
                 app.UseHsts();
+                var forwardOptions = new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+                    RequireHeaderSymmetry = false
+                };
+
+                forwardOptions.KnownNetworks.Clear();
+                forwardOptions.KnownProxies.Clear();
+
+                // ref: https://github.com/aspnet/Docs/issues/2384
+                app.UseForwardedHeaders(forwardOptions);
             }
 
             app.UseStaticFiles();
