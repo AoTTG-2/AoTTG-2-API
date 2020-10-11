@@ -80,19 +80,18 @@ namespace AoTTG2.IDS
             }
             else
             {
-                app.UseDeveloperExceptionPage();
                 app.UseHsts();
-                //var forwardOptions = new ForwardedHeadersOptions
-                //{
-                //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-                //    RequireHeaderSymmetry = false
-                //};
+                var forwardOptions = new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+                    RequireHeaderSymmetry = false
+                };
 
-                //forwardOptions.KnownNetworks.Clear();
-                //forwardOptions.KnownProxies.Clear();
+                forwardOptions.KnownNetworks.Clear();
+                forwardOptions.KnownProxies.Clear();
 
-                //// ref: https://github.com/aspnet/Docs/issues/2384
-                //app.UseForwardedHeaders(forwardOptions);
+                // ref: https://github.com/aspnet/Docs/issues/2384
+                app.UseForwardedHeaders(forwardOptions);
             }
 
             app.UseStaticFiles();
@@ -104,6 +103,21 @@ namespace AoTTG2.IDS
                 endpoints.MapDefaultControllerRoute();
             });
             app.UseHttpsRedirection();
+
+            UpdateDatabase(app);
+        }
+
+        private void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }
