@@ -79,8 +79,6 @@ namespace AoTTG2.IDS
             }
 
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
-
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
