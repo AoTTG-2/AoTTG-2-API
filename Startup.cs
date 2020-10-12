@@ -1,7 +1,7 @@
 ﻿using AoTTG2.IDS.Data;
 using AoTTG2.IDS.Models;
+using Discord.OAuth2;
 using IdentityServer4;
-using AoTTG2_IDS.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -62,12 +62,20 @@ namespace AoTTG2.IDS
                 .AddGoogle(options =>
                 {
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    
+
                     // register your IdentityServer with Google at https://console.developers.google.com
                     // enable the Google+ API
                     // set the redirect URI to https://localhost:5001/signin-google
                     options.ClientId = "1017519256024-rlhr9vjeuhd8ovv2fe0hbb078og12uqq.apps.googleusercontent.com";
                     options.ClientSecret = "od50cBDPCiAAZVk_u3yw_SNM";
+                })
+                .AddDiscord(options =>
+                {
+                    options.AppId = "764974724907270194";
+                    options.AppSecret = "TjYxxYfY5WS9IiRBfTXGxlqxY55ULYbP";
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.Prompt = DiscordOptions.PromptTypes.Consent;
+                    options.Scope.Add("identify");
                 });
 
             services.AddHealthChecks();
