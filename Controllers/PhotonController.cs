@@ -6,9 +6,15 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Threading;
 using System.Threading.Tasks;
+using IdentityServer4.Extensions;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace AoTTG2.IDS.Controllers
 {
@@ -43,23 +49,55 @@ namespace AoTTG2.IDS.Controllers
         /// Entry point into the login workflow
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> Custom(string token2 = null)
+        public async Task<IActionResult> Custom(string token = null)
         {
-            //TODO: Validate the AccessToken
+            var result = await ValidateToken(token);
+            return Ok(result);
+        }
 
-            var request = HttpContext;
-            var jwtHandler = new JwtSecurityTokenHandler();
-            var data = jwtHandler.ReadJwtToken(token2);
-            var cookie = new Dictionary<string, object>()
+        private async Task<CustomAuthenticationResult> ValidateToken(string token)
+        {
+            try
             {
-                { "authenticated", true }
-            };
-            return Ok(new
+                var jwtHandler = new JwtSecurityTokenHandler();
+                jwtHandler.ValidateToken(token, await GetParameters(), out var validatedToken);
+                var securityToken = jwtHandler.ReadJwtToken(token);
+                return new CustomAuthenticationResult
+                {
+                    AuthCookie = new Dictionary<string, object>()
+                    {
+                        {"authenticated", true}
+                    },
+                    ExpireAt = DateTime.UtcNow.Ticks,
+                    ResultCode = PhotonResultCode.Success,
+                    UserId = securityToken.Subject
+                };
+            }
+            catch (Exception e)
             {
-                UserId = data.Subject,
-                AuthCookie = cookie,
-                ResultCode = 1,
-            });
+                return new CustomAuthenticationResult
+                {
+                    ResultCode = PhotonResultCode.Failed
+                };
+            }
+
+        }
+
+        private async Task<TokenValidationParameters> GetParameters()
+        {
+            var address = HttpContext.GetIdentityServerIssuerUri();
+            IConfigurationManager<OpenIdConnectConfiguration> configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>($"{address}/.well-known/openid-configuration", new OpenIdConnectConfigurationRetriever());
+            OpenIdConnectConfiguration openIdConfig = await configurationManager.GetConfigurationAsync(CancellationToken.None);
+            var validationParameters =
+                new TokenValidationParameters
+                {
+                    ValidIssuer = "https://localhost:5001",
+                    ValidAudiences = new[] { "https://localhost:5001/resources" },
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKeys = openIdConfig.SigningKeys
+                };
+
+            return validationParameters;
         }
     }
 }
