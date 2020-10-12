@@ -91,8 +91,8 @@ namespace AoTTG2.IDS.Controllers
             var validationParameters =
                 new TokenValidationParameters
                 {
-                    ValidIssuer = "https://localhost:5001",
-                    ValidAudiences = new[] { "https://localhost:5001/resources" },
+                    ValidIssuer = address,
+                    ValidAudience = address + "/resources",
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKeys = openIdConfig.SigningKeys
                 };
