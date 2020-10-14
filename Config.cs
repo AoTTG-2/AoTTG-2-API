@@ -32,7 +32,8 @@ namespace AoTTG2.IDS
                     RedirectUris = { "http://127.0.0.1:51772/" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile" }
+                    AllowedScopes = { "openid", "profile" },
+                    PostLogoutRedirectUris = { "http://127.0.0.1:51772/" }
                 },
 
                 new Client
