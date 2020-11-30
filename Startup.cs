@@ -76,6 +76,12 @@ namespace AoTTG2.IDS
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                     options.Prompt = DiscordOptions.PromptTypes.Consent;
                     options.Scope.Add("identify");
+                })
+                .AddVkontakte(options =>
+                {
+                    options.ClientId = "7683401";
+                    options.ClientSecret = "3JLeAbHMPkQYqXbdhwgz";
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                 });
 
             services.AddHealthChecks();

@@ -9,7 +9,7 @@ namespace AoTTG2.IDS
                    new IdentityResource[]
                    {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
+                new IdentityResources.Profile(), 
                    };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -26,14 +26,12 @@ namespace AoTTG2.IDS
                 {
                     ClientId = "AoTTG2",
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-
                     AllowedGrantTypes = GrantTypes.Code,
-
                     RedirectUris = { "http://127.0.0.1:51772/" },
-
-                    AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile" },
-                    PostLogoutRedirectUris = { "http://127.0.0.1:51772/" }
+                    PostLogoutRedirectUris = { "http://127.0.0.1:51772/" },
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly
                 },
 
                 new Client
