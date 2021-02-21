@@ -1,7 +1,11 @@
-﻿using AoTTG2.IDS.Data;
+﻿// Copyright (c) Duende Software. All rights reserved.
+// See LICENSE in the project root for license information.
+
+
+using AoTTG2.IDS.Data;
 using AoTTG2.IDS.Models;
 using Discord.OAuth2;
-using IdentityServer4;
+using Duende.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -29,7 +33,8 @@ namespace AoTTG2.IDS
             services.AddControllersWithViews();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), 
+                    o => o.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -42,7 +47,7 @@ namespace AoTTG2.IDS
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
 
-                // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
+                // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
@@ -57,7 +62,6 @@ namespace AoTTG2.IDS
             {
                 options.HttpsPort = 443;
             });
-
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {

@@ -1,8 +1,13 @@
+// Copyright (c) Duende Software. All rights reserved.
+// See LICENSE in the project root for license information.
+
+
 using System;
-using IdentityServer4.Models;
+using AoTTG2.IDS.Quickstart.Account;
+using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace AoTTG2.IDS.Quickstart
 {
     public static class Extensions
     {

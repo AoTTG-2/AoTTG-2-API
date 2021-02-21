@@ -2,9 +2,11 @@
 // See LICENSE in the project root for license information.
 
 
-using AoTTG2.IDS.Quickstart;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AoTTG2.IDS.Quickstart.Consent;
-using AoTTG2.IDS.Quickstart.Device;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
@@ -15,12 +17,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace AoTTG2.IDS.Controllers
+namespace AoTTG2.IDS.Quickstart.Device
 {
     [Authorize]
     [SecurityHeaders]
