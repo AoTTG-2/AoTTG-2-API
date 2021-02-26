@@ -1,8 +1,3 @@
-// Copyright (c) Duende Software. All rights reserved.
-// See LICENSE in the project root for license information.
-
-
-using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using System.Collections.Generic;
 
@@ -11,53 +6,42 @@ namespace AoTTG2.IDS
     public static class Config
     {
         public static IEnumerable<IdentityResource> IdentityResources =>
-            new List<IdentityResource>
+            new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
             };
 
-
         public static IEnumerable<ApiScope> ApiScopes =>
-            new List<ApiScope>
+            new ApiScope[]
             {
-                new ApiScope("api1", "My API")
+                new ApiScope("scope1"),
+                new ApiScope("scope2"),
             };
 
         public static IEnumerable<Client> Clients =>
-            new List<Client>
+            new Client[]
             {
-                // machine to machine client
                 new Client
                 {
-                    ClientId = "client",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    // scopes that client has access to
-                    AllowedScopes = { "api1" }
-                },
-                
-                // interactive ASP.NET Core MVC client
-                new Client
-                {
-                    ClientId = "mvc",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
+                    ClientId = "AoTTG2",
+                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
                     AllowedGrantTypes = GrantTypes.Code,
-                    
-                    // where to redirect to after login
-                    RedirectUris = { "https://localhost:5002/signin-oidc" },
+                    RedirectUris = { "http://127.0.0.1:51772/" },
+                    AllowedScopes = { "openid", "profile" },
+                    PostLogoutRedirectUris = { "http://127.0.0.1:51772/" },
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly
+                },
 
-                    // where to redirect to after logout
-                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+                new Client
+                {
+                    ClientId = "Photon",
+                    ClientSecrets =  { new Secret("abc".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    RedirectUris = { "https://127.0.0.1:5055/" },
+                    AllowedScopes = {"openid", "profile"}
 
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "api1"
-                    }
                 }
             };
     }

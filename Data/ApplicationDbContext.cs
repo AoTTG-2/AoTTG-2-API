@@ -1,4 +1,5 @@
-﻿using AoTTG2.IDS.Models;
+﻿using AoTTG2.IDS.Data.Dao;
+using AoTTG2.IDS.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,8 @@ namespace AoTTG2.IDS.Data
             : base(options)
         {
         }
+
+        public DbSet<ReportDao> Reports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

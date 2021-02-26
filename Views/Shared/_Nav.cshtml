@@ -1,4 +1,7 @@
+@using AoTTG2.IDS.Areas.Identity.Pages.Account.Manage
+@using AoTTG2.IDS.Models
 @using Duende.IdentityServer.Extensions
+@using Microsoft.AspNetCore.Identity
 @{
     string name = null;
     if (!true.Equals(ViewData["signed-out"]))
@@ -20,13 +23,13 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
-                    
+
                     <div class="dropdown-menu">
                         <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
                     </div>
-              </li>
+                </li>
             </ul>
         }
-    
+
     </nav>
 </div>

@@ -2,10 +2,15 @@
 // See LICENSE in the project root for license information.
 
 
+using System.Linq;
+using System.Reflection;
 using AoTTG2.IDS.Data;
 using AoTTG2.IDS.Models;
 using Discord.OAuth2;
 using Duende.IdentityServer;
+using Duende.IdentityServer.EntityFramework.DbContexts;
+using Duende.IdentityServer.EntityFramework.Mappers;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -32,9 +37,11 @@ namespace AoTTG2.IDS
         {
             services.AddControllersWithViews();
 
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), 
-                    o => o.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
+                options.UseSqlServer(connectionString, o => o.MigrationsAssembly(migrationsAssembly)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -50,9 +57,15 @@ namespace AoTTG2.IDS
                 // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
             })
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+                    options.EnableTokenCleanup = true;
+                })
                 .AddAspNetIdentity<ApplicationUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
@@ -86,15 +99,18 @@ namespace AoTTG2.IDS
                     options.ClientId = "7683401";
                     options.ClientSecret = "3JLeAbHMPkQYqXbdhwgz";
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                });
+                })
+                .AddCertificate(opt => { opt.AllowedCertificateTypes = CertificateTypes.SelfSigned; });
 
             services.AddHealthChecks();
+            services.AddRazorPages();
         }
 
         public void Configure(IApplicationBuilder app)
         {
             if (Environment.IsDevelopment())
             {
+                app.UseHsts();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
@@ -121,11 +137,13 @@ namespace AoTTG2.IDS
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("/health");
             });
             app.UseHttpsRedirection();
 
             UpdateDatabase(app);
+            InitializeDatabase(app);
         }
 
         private void UpdateDatabase(IApplicationBuilder app)
@@ -137,6 +155,43 @@ namespace AoTTG2.IDS
                 using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
                     context.Database.Migrate();
+                }
+            }
+        }
+
+        private void InitializeDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+
+                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                context.Database.Migrate();
+                if (!context.Clients.Any())
+                {
+                    foreach (var client in Config.Clients)
+                    {
+                        context.Clients.Add(client.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.IdentityResources.Any())
+                {
+                    foreach (var resource in Config.IdentityResources)
+                    {
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.ApiScopes.Any())
+                {
+                    foreach (var resource in Config.ApiScopes)
+                    {
+                        context.ApiScopes.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
                 }
             }
         }
