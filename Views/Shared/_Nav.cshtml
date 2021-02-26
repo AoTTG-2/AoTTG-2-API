@@ -1,4 +1,5 @@
 @using AoTTG2.IDS.Areas.Identity.Pages.Account.Manage
+@using AoTTG2.IDS.Extensions
 @using AoTTG2.IDS.Models
 @using Duende.IdentityServer.Extensions
 @using Microsoft.AspNetCore.Identity
@@ -6,7 +7,7 @@
     string name = null;
     if (!true.Equals(ViewData["signed-out"]))
     {
-        name = Context.User?.GetDisplayName();
+        name = Context.User?.GetUserName();
     }
 }
 
@@ -27,6 +28,7 @@
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Manage</a>
                     <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/Identity/Account/Manage">Profile</a>
                         <a class="dropdown-item" href="/Identity/Account/Manage/ExternalLogins">External Logins</a>
                         <a class="dropdown-item" href="/Identity/Account/Manage/PersonalData">Personal Data</a>
                     </div>
