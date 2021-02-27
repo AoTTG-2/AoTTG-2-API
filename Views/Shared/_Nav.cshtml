@@ -33,6 +33,12 @@
                         <a class="dropdown-item" href="/Identity/Account/Manage/PersonalData">Personal Data</a>
                     </div>
                 </li>
+                @if (User.IsModerator())
+                {
+                    <li class="nav-item">
+                        <a href="/Identity/Reports" class="nav-link">Reports</a>
+                    </li>
+                }
             </ul>
 
             <div class="nav-item">

@@ -1,11 +1,6 @@
-﻿// Copyright (c) Duende Software. All rights reserved.
-// See LICENSE in the project root for license information.
-
-
-using System.Linq;
-using System.Reflection;
-using AoTTG2.IDS.Data;
+﻿using AoTTG2.IDS.Data;
 using AoTTG2.IDS.Models;
+using AoTTG2.IDS.Security;
 using Discord.OAuth2;
 using Duende.IdentityServer;
 using Duende.IdentityServer.EntityFramework.DbContexts;
@@ -19,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
+using System.Reflection;
 
 namespace AoTTG2.IDS
 {
@@ -44,6 +41,7 @@ namespace AoTTG2.IDS
                 options.UseSqlServer(connectionString, o => o.MigrationsAssembly(migrationsAssembly)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -75,6 +73,7 @@ namespace AoTTG2.IDS
             {
                 options.HttpsPort = 443;
             });
+            var oAuthConfig = Configuration.GetSection("OAuth");
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
@@ -83,21 +82,21 @@ namespace AoTTG2.IDS
                     // register your IdentityServer with Google at https://console.developers.google.com
                     // enable the Google+ API
                     // set the redirect URI to https://localhost:5001/signin-google
-                    options.ClientId = "1017519256024-rlhr9vjeuhd8ovv2fe0hbb078og12uqq.apps.googleusercontent.com";
-                    options.ClientSecret = "od50cBDPCiAAZVk_u3yw_SNM";
+                    options.ClientId = oAuthConfig.GetSection("Google")["ClientId"];
+                    options.ClientSecret = oAuthConfig.GetSection("Google")["ClientSecret"];
                 })
                 .AddDiscord(options =>
                 {
-                    options.AppId = "764974724907270194";
-                    options.AppSecret = "TjYxxYfY5WS9IiRBfTXGxlqxY55ULYbP";
+                    options.AppId = oAuthConfig.GetSection("Discord")["ClientId"];
+                    options.AppSecret = oAuthConfig.GetSection("Discord")["ClientSecret"];
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                     options.Prompt = DiscordOptions.PromptTypes.Consent;
                     options.Scope.Add("identify");
                 })
                 .AddVkontakte(options =>
                 {
-                    options.ClientId = "7683401";
-                    options.ClientSecret = "3JLeAbHMPkQYqXbdhwgz";
+                    options.ClientId = oAuthConfig.GetSection("Vkontakte")["ClientId"];
+                    options.ClientSecret = oAuthConfig.GetSection("Vkontakte")["ClientSecret"];
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                 })
                 .AddCertificate(opt => { opt.AllowedCertificateTypes = CertificateTypes.SelfSigned; });
@@ -110,7 +109,6 @@ namespace AoTTG2.IDS
         {
             if (Environment.IsDevelopment())
             {
-                app.UseHsts();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
@@ -129,6 +127,19 @@ namespace AoTTG2.IDS
                 // ref: https://github.com/aspnet/Docs/issues/2384
                 app.UseForwardedHeaders(forwardOptions);
             }
+
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add(
+                    "Content-Security-Policy",
+                    "default-src 'self'; " +
+                    " script-src 'self' ajax.googleapis.com ajax.aspnetcdn.com; " +
+                    "style-src 'self'; " +
+                    "img-src 'self'");
+
+                await next();
+            });
 
             app.UseStaticFiles();
             app.UseRouting();
@@ -192,6 +203,15 @@ namespace AoTTG2.IDS
                         context.ApiScopes.Add(resource.ToEntity());
                     }
                     context.SaveChanges();
+                }
+
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                foreach (var role in Roles.GetConfigRoles)
+                {
+                    if (!roleManager.RoleExistsAsync(role).Result)
+                    {
+                        _ = roleManager.CreateAsync(new IdentityRole(role)).Result;
+                    }
                 }
             }
         }
