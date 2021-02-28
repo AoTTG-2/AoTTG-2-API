@@ -22,7 +22,7 @@ namespace AoTTG2.IDS.Pages.Reports
         [BindProperty]
         public ReportDao ReportDao { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(long? id)
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null)
             {
@@ -38,7 +38,7 @@ namespace AoTTG2.IDS.Pages.Reports
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(long? id)
+        public async Task<IActionResult> OnPostAsync(Guid? id)
         {
             if (id == null)
             {

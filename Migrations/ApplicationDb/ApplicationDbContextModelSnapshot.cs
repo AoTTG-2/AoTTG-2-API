@@ -21,10 +21,9 @@ namespace AoTTG2.IDS.Migrations.ApplicationDb
 
             modelBuilder.Entity("AoTTG2.IDS.Data.Dao.ReportDao", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("AssignedTo")
                         .HasColumnType("uniqueidentifier");

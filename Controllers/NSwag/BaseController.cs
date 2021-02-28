@@ -17,15 +17,11 @@ namespace AoTTG2.IDS.Controllers.NSwag
     
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.10.4.0 (NJsonSchema v10.3.7.0 (Newtonsoft.Json v12.0.0.0))")]
     [Microsoft.AspNetCore.Mvc.Route("AoTTG2/API/1.0.0")]
-    public abstract class ControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
+    public abstract class ReportControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         /// <summary>Submits a new report</summary>
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("report")]
-        public abstract System.Threading.Tasks.Task AddReport([Microsoft.AspNetCore.Mvc.FromBody] Report body);
-    
-        /// <summary>Updates the status of the report</summary>
-        [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("report")]
-        public abstract System.Threading.Tasks.Task UpdateReport([Microsoft.AspNetCore.Mvc.FromBody] ReportStatusDto body);
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("report", Name = "addReport")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> AddReport([Microsoft.AspNetCore.Mvc.FromBody] Report body);
     
     }
 

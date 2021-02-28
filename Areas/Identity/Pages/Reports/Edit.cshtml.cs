@@ -23,7 +23,7 @@ namespace AoTTG2.IDS.Pages.Reports
         [BindProperty]
         public ReportDao ReportDao { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(long? id)
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null)
             {
@@ -69,7 +69,7 @@ namespace AoTTG2.IDS.Pages.Reports
             return RedirectToPage("./Index");
         }
 
-        private bool ReportDaoExists(long id)
+        private bool ReportDaoExists(Guid id)
         {
             return _context.Reports.Any(e => e.Id == id);
         }

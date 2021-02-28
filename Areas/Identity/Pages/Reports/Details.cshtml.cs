@@ -21,7 +21,7 @@ namespace AoTTG2.IDS.Pages.Reports
 
         public ReportDao ReportDao { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(long? id)
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null)
             {

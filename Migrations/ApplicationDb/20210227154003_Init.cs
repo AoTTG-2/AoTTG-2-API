@@ -50,8 +50,7 @@ namespace AoTTG2.IDS.Migrations.ApplicationDb
                 name: "Reports",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     EntityId = table.Column<Guid>(nullable: false),
                     EntityType = table.Column<int>(nullable: false),
                     SenderId = table.Column<Guid>(nullable: false),
