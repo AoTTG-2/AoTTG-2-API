@@ -1,0 +1,71 @@
+﻿@page
+@using AoTTG2.IDS.Controllers.NSwag
+@model AoTTG2.IDS.Pages.Reports.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>ReportDao</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ReportDao.EntityId" class="control-label"></label>
+                <input asp-for="ReportDao.EntityId" class="form-control" />
+                <span asp-validation-for="ReportDao.EntityId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportDao.EntityType" class="control-label"></label>
+                <select asp-for="ReportDao.EntityType" asp-items="Html.GetEnumSelectList<EntityType>()" class="form-control"></select>
+                <span asp-validation-for="ReportDao.EntityType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportDao.SenderId" class="control-label"></label>
+                <input asp-for="ReportDao.SenderId" class="form-control" />
+                <span asp-validation-for="ReportDao.SenderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportDao.Type" class="control-label"></label>
+                <select asp-for="ReportDao.Type" class="form-control"></select>
+                <span asp-validation-for="ReportDao.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportDao.Message" class="control-label"></label>
+                <input asp-for="ReportDao.Message" class="form-control" />
+                <span asp-validation-for="ReportDao.Message" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportDao.Status" class="control-label"></label>
+                <select asp-for="ReportDao.Status" class="form-control"></select>
+                <span asp-validation-for="ReportDao.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportDao.Note" class="control-label"></label>
+                <input asp-for="ReportDao.Note" class="form-control" />
+                <span asp-validation-for="ReportDao.Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportDao.AssignedTo" class="control-label"></label>
+                <input asp-for="ReportDao.AssignedTo" class="form-control" />
+                <span asp-validation-for="ReportDao.AssignedTo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

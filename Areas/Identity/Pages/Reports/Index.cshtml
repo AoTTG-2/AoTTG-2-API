@@ -1,0 +1,79 @@
+﻿@page
+@model AoTTG2.IDS.Pages.Reports.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="./Create" asp-route-id="report-create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportDao[0].EntityId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportDao[0].EntityType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportDao[0].SenderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportDao[0].Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportDao[0].Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportDao[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportDao[0].Note)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportDao[0].AssignedTo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ReportDao) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EntityId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EntityType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SenderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignedTo)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

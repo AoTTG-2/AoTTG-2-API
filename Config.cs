@@ -1,4 +1,4 @@
-﻿using IdentityServer4.Models;
+using Duende.IdentityServer.Models;
 using System.Collections.Generic;
 
 namespace AoTTG2.IDS
@@ -6,11 +6,11 @@ namespace AoTTG2.IDS
     public static class Config
     {
         public static IEnumerable<IdentityResource> IdentityResources =>
-                   new IdentityResource[]
-                   {
+            new IdentityResource[]
+            {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(), 
-                   };
+                new IdentityResources.Profile(),
+            };
 
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
