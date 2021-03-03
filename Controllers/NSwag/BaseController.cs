@@ -24,13 +24,68 @@ namespace AoTTG2.IDS.Controllers.NSwag
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> AddReport([Microsoft.AspNetCore.Mvc.FromBody] Report body);
     
     }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.10.4.0 (NJsonSchema v10.3.7.0 (Newtonsoft.Json v12.0.0.0))")]
+    [Microsoft.AspNetCore.Mvc.Route("AoTTG2/API/1.0.0")]
+    public abstract class UserControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
+    {
+        /// <summary>Gets information about the selected user. if Guid.Empty, it returns self</summary>
+        /// <param name="userId">The ID of the User. Guid.Empty to return self</param>
+        /// <returns>The user was found</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("user/{userId}", Name = "getUserById")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<UserDetailDto>> GetUserById([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid userId);
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.10.4.0 (NJsonSchema v10.3.7.0 (Newtonsoft.Json v12.0.0.0))")]
+    [Microsoft.AspNetCore.Mvc.Route("AoTTG2/API/1.0.0")]
+    public abstract class BadgeControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
+    {
+        /// <summary>Gets the badges of the user</summary>
+        /// <param name="userId">The ID of the User. If null, then the sub claim is used</param>
+        /// <param name="sortColumn">An optional column the user wants to sort on</param>
+        /// <returns>The badges of the user</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("user/badges", Name = "getUserBadges")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<UserBadgePaged>> GetUserBadges([Microsoft.AspNetCore.Mvc.FromQuery] System.Guid? userId, [Microsoft.AspNetCore.Mvc.FromQuery] int? page, [Microsoft.AspNetCore.Mvc.FromQuery] string sortColumn, [Microsoft.AspNetCore.Mvc.FromQuery] SortDirection? sortDirection);
+    
+    }
 
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Paged 
+    {
+        /// <summary>the current page the user is on</summary>
+        [Newtonsoft.Json.JsonProperty("currentPage", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CurrentPage { get; set; }
+    
+        /// <summary>total count of pages</summary>
+        [Newtonsoft.Json.JsonProperty("pageCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int PageCount { get; set; }
+    
+        /// <summary>the size of the page</summary>
+        [Newtonsoft.Json.JsonProperty("pageSize", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int PageSize { get; set; }
+    
+        /// <summary>the total amount of results</summary>
+        [Newtonsoft.Json.JsonProperty("rowCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int RowCount { get; set; }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public enum SortDirection
+    {
+        [System.Runtime.Serialization.EnumMember(Value = @"Ascending")]
+        Ascending = 0,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"Descending")]
+        Descending = 1,
+    
+    }
+    
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class Report 
     {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
-    
         /// <summary>The ID of the user that sent this report</summary>
         [Newtonsoft.Json.JsonProperty("senderId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid SenderId { get; set; }
@@ -114,6 +169,132 @@ namespace AoTTG2.IDS.Controllers.NSwag
         [Newtonsoft.Json.JsonProperty("note", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.StringLength(1500)]
         public string Note { get; set; }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class UserDetailDto 
+    {
+        /// <summary>The ID of the user</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+    
+        /// <summary>The username of the user</summary>
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("displayBadge", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Badge DisplayBadge { get; set; }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Badge 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Description { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public BadgeType Type { get; set; }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public enum BadgeType
+    {
+        [System.Runtime.Serialization.EnumMember(Value = @"DevTeam")]
+        DevTeam = 0,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"ArtTeam")]
+        ArtTeam = 1,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"MapTeam")]
+        MapTeam = 2,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"ProposalTeam")]
+        ProposalTeam = 3,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"ManagementTeam")]
+        ManagementTeam = 4,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"TestTeam")]
+        TestTeam = 5,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"Donator")]
+        Donator = 6,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"Year1")]
+        Year1 = 7,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"Year2")]
+        Year2 = 8,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"Year3")]
+        Year3 = 9,
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class UserBadge : Badge
+    {
+        /// <summary>The date the badge was obtained</summary>
+        [Newtonsoft.Json.JsonProperty("date", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset Date { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class UserBadgePaged : Paged
+    {
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.List<UserBadge> Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class BadgePaged : Paged
+    {
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.List<Badge> Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
     
     
     }
