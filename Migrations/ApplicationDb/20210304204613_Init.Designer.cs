@@ -4,177 +4,22 @@ using AoTTG2.IDS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AoTTG2.IDS.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210304204613_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("AoTTG2.IDS.Data.Dao.Assets.SetHumanDao", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CapeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<Guid?>("EmblemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("Endorsement")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid?>("EyesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("FacialId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("GlassesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("HairId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LegacyOwner")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<Guid?>("OutfitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("SkinId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CapeId");
-
-                    b.HasIndex("EmblemId");
-
-                    b.HasIndex("EyesId");
-
-                    b.HasIndex("FacialId");
-
-                    b.HasIndex("GlassesId");
-
-                    b.HasIndex("HairId");
-
-                    b.HasIndex("OutfitId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.HasIndex("SkinId");
-
-                    b.ToTable("SetHumans");
-                });
-
-            modelBuilder.Entity("AoTTG2.IDS.Data.Dao.Assets.SetTitanDao", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BodyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<long>("Endorsement")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid?>("EyesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("HairId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LegacyOwner")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<Guid?>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BodyId");
-
-                    b.HasIndex("EyesId");
-
-                    b.HasIndex("HairId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("SetTitans");
-                });
-
-            modelBuilder.Entity("AoTTG2.IDS.Data.Dao.Assets.SkinDao", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("CompatibleModels")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<long>("Endorsement")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LegacyOwner")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<Guid?>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Skins");
-                });
 
             modelBuilder.Entity("AoTTG2.IDS.Data.Dao.BadgeDao", b =>
                 {
@@ -248,34 +93,6 @@ namespace AoTTG2.IDS.Migrations.ApplicationDb
                     b.HasIndex("BadgeId");
 
                     b.ToTable("UserBadges");
-                });
-
-            modelBuilder.Entity("AoTTG2.IDS.Models.ApplicationRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("AoTTG2.IDS.Models.ApplicationUser", b =>
@@ -355,7 +172,35 @@ namespace AoTTG2.IDS.Migrations.ApplicationDb
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -456,71 +301,6 @@ namespace AoTTG2.IDS.Migrations.ApplicationDb
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("AoTTG2.IDS.Data.Dao.Assets.SetHumanDao", b =>
-                {
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Cape")
-                        .WithMany()
-                        .HasForeignKey("CapeId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Emblem")
-                        .WithMany()
-                        .HasForeignKey("EmblemId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Eyes")
-                        .WithMany()
-                        .HasForeignKey("EyesId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Facial")
-                        .WithMany()
-                        .HasForeignKey("FacialId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Glasses")
-                        .WithMany()
-                        .HasForeignKey("GlassesId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Hair")
-                        .WithMany()
-                        .HasForeignKey("HairId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Outfit")
-                        .WithMany()
-                        .HasForeignKey("OutfitId");
-
-                    b.HasOne("AoTTG2.IDS.Models.ApplicationUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Skin")
-                        .WithMany()
-                        .HasForeignKey("SkinId");
-                });
-
-            modelBuilder.Entity("AoTTG2.IDS.Data.Dao.Assets.SetTitanDao", b =>
-                {
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Body")
-                        .WithMany()
-                        .HasForeignKey("BodyId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Eyes")
-                        .WithMany()
-                        .HasForeignKey("EyesId");
-
-                    b.HasOne("AoTTG2.IDS.Data.Dao.Assets.SkinDao", "Hair")
-                        .WithMany()
-                        .HasForeignKey("HairId");
-
-                    b.HasOne("AoTTG2.IDS.Models.ApplicationUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-                });
-
-            modelBuilder.Entity("AoTTG2.IDS.Data.Dao.Assets.SkinDao", b =>
-                {
-                    b.HasOne("AoTTG2.IDS.Models.ApplicationUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-                });
-
             modelBuilder.Entity("AoTTG2.IDS.Data.Dao.UserBadgeDao", b =>
                 {
                     b.HasOne("AoTTG2.IDS.Data.Dao.BadgeDao", "Badge")
@@ -543,9 +323,9 @@ namespace AoTTG2.IDS.Migrations.ApplicationDb
                         .HasForeignKey("DisplayBadgeUserId", "DisplayBadgeBadgeId");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("AoTTG2.IDS.Models.ApplicationRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.ApplicationRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -572,7 +352,7 @@ namespace AoTTG2.IDS.Migrations.ApplicationDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("AoTTG2.IDS.Models.ApplicationRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.ApplicationRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

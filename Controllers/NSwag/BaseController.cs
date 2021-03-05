@@ -21,7 +21,7 @@ namespace AoTTG2.IDS.Controllers.NSwag
     {
         /// <summary>Submits a new report</summary>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("report", Name = "addReport")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> AddReport([Microsoft.AspNetCore.Mvc.FromBody] Report body);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> AddReport([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Report body);
     
     }
     
@@ -29,11 +29,11 @@ namespace AoTTG2.IDS.Controllers.NSwag
     [Microsoft.AspNetCore.Mvc.Route("AoTTG2/API/1.0.0")]
     public abstract class UserControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
     {
-        /// <summary>Gets information about the selected user. if Guid.Empty, it returns self</summary>
-        /// <param name="userId">The ID of the User. Guid.Empty to return self</param>
+        /// <summary>Gets information about the selected user.</summary>
+        /// <param name="userId">The ID of the User. If null, then the sub claim is used</param>
         /// <returns>The user was found</returns>
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("user/{userId}", Name = "getUserById")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<UserDetailDto>> GetUserById([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid userId);
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("user", Name = "getUserById")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<UserDetailDto>> GetUserById([Microsoft.AspNetCore.Mvc.FromQuery] System.Guid? userId = null);
     
     }
     
@@ -43,10 +43,11 @@ namespace AoTTG2.IDS.Controllers.NSwag
     {
         /// <summary>Gets the badges of the user</summary>
         /// <param name="userId">The ID of the User. If null, then the sub claim is used</param>
+        /// <param name="searchQuery">Optional searchQuery</param>
         /// <param name="sortColumn">An optional column the user wants to sort on</param>
         /// <returns>The badges of the user</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("user/badges", Name = "getUserBadges")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<UserBadgePaged>> GetUserBadges([Microsoft.AspNetCore.Mvc.FromQuery] System.Guid? userId, [Microsoft.AspNetCore.Mvc.FromQuery] int? page, [Microsoft.AspNetCore.Mvc.FromQuery] string sortColumn, [Microsoft.AspNetCore.Mvc.FromQuery] SortDirection? sortDirection);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<UserBadgePaged>> GetUserBadges([Microsoft.AspNetCore.Mvc.FromQuery] System.Guid? userId = null, [Microsoft.AspNetCore.Mvc.FromQuery] int? page = 0, [Microsoft.AspNetCore.Mvc.FromQuery] System.Collections.Generic.IEnumerable<SearchQuery> searchQuery = null, [Microsoft.AspNetCore.Mvc.FromQuery] string sortColumn = null, [Microsoft.AspNetCore.Mvc.FromQuery] SortDirection? sortDirection = null);
     
     }
 
@@ -80,6 +81,18 @@ namespace AoTTG2.IDS.Controllers.NSwag
     
         [System.Runtime.Serialization.EnumMember(Value = @"Descending")]
         Descending = 1,
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.7.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class SearchQuery 
+    {
+        [Newtonsoft.Json.JsonProperty("columnName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ColumnName { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("searchValue", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SearchValue { get; set; }
+    
     
     }
     
@@ -269,15 +282,6 @@ namespace AoTTG2.IDS.Controllers.NSwag
         [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.List<UserBadge> Data { get; set; }
     
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties; }
-            set { _additionalProperties = value; }
-        }
-    
     
     }
     
@@ -286,15 +290,6 @@ namespace AoTTG2.IDS.Controllers.NSwag
     {
         [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.List<Badge> Data { get; set; }
-    
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties; }
-            set { _additionalProperties = value; }
-        }
     
     
     }

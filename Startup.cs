@@ -14,6 +14,7 @@ using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,10 +25,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AoTTG2.IDS
 {
@@ -56,8 +55,8 @@ namespace AoTTG2.IDS
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString, o => o.MigrationsAssembly(migrationsAssembly)));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddRoles<IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -252,12 +251,12 @@ namespace AoTTG2.IDS
                     context.SaveChanges();
                 }
 
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
                 foreach (var role in Roles.GetConfigRoles)
                 {
                     if (!roleManager.RoleExistsAsync(role).Result)
                     {
-                        _ = roleManager.CreateAsync(new IdentityRole(role)).Result;
+                        _ = roleManager.CreateAsync(new ApplicationRole(role)).Result;
                     }
                 }
             }

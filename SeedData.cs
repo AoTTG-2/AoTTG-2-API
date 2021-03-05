@@ -24,7 +24,7 @@ namespace AoTTG2.IDS
             services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlite(connectionString, o => o.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
