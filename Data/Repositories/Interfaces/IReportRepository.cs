@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 
 namespace AoTTG2.IDS.Data.Repositories.Interfaces
 {
-    public interface IReportRepository
+    public interface IReportRepository : IBaseRepository<ReportDao>
     {
-        Task AddAsync(ReportDao report);
     }
 }
