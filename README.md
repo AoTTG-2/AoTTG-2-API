@@ -5,5 +5,4 @@ In terms of organization, it follows the structure as the [AoTTG2 repository](ht
 
 ## Running the API Locally
 1. Clone the repository
-2. Assure within your Visual Studio Installer that you have installed "ASP.NET and web development" & ".NET Core cross-platform development"
-3. Press start to run the API locally.
+2. Assure within your Visual Studio Installer 
